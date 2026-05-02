@@ -869,13 +869,13 @@ async function handleHomePage(origin) {
 }
 
 async function handleAdminPage(request, env, origin) {
-  // if (!env.ADMIN_SECRET) {
-  //   return new Response(misconfiguredPage(), {
-  //     status: 503,
-  //     headers: { 'Content-Type': 'text/html; charset=utf-8' },
-  //   });
-  // }
-  // if (!await checkAdminAuth(request, env)) return unauthorizedResponse();
+  if (!env.ADMIN_SECRET) {
+    return new Response(misconfiguredPage(), {
+      status: 503,
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    });
+  }
+  if (!await checkAdminAuth(request, env)) return unauthorizedResponse();
 
   const links = await getAllLinks(env);
   return new Response(adminPage(links, origin), {
@@ -884,15 +884,15 @@ async function handleAdminPage(request, env, origin) {
 }
 
 async function handleAPI(request, env, pathname) {
-  // if (!env.ADMIN_SECRET) {
-  //   return Response.json({ error: 'ADMIN_SECRET is not configured' }, { status: 503 });
-  // }
-  // if (!await checkAdminAuth(request, env)) {
-  //   return new Response('Unauthorized', {
-  //     status: 401,
-  //     headers: { 'WWW-Authenticate': `Basic realm="${ADMIN_REALM}"` },
-  //   });
-  // }
+  if (!env.ADMIN_SECRET) {
+    return Response.json({ error: 'ADMIN_SECRET is not configured' }, { status: 503 });
+  }
+  if (!await checkAdminAuth(request, env)) {
+    return new Response('Unauthorized', {
+      status: 401,
+      headers: { 'WWW-Authenticate': `Basic realm="${ADMIN_REALM}"` },
+    });
+  }
 
   // GET /api/links
   if (pathname === '/api/links' && request.method === 'GET') {

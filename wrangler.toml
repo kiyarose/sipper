@@ -4,16 +4,16 @@ compatibility_date = "2025-04-01"
 
 # ─── KV Namespace ────────────────────────────────────────────────────────────
 [[kv_namespaces]]
-binding = "LINKIVERSE"
-id = "30fa1d3f69d8412bb79886b862851801"
+binding = "SIPPER"
+id = "255c3d829a4d4fd788160a3e3928c0cb"
 # Uncomment and fill in a preview namespace ID for `wrangler dev`:
-preview_id = "00410bf2f1054283819de99e7958be89"
+preview_id = "3066f76b06bb4e51943cc1aa425ad762"
 
 # ─── Custom Domain (optional) ────────────────────────────────────────────────
 # Uncomment and update to route a custom domain through this worker.
 [[routes]]
-pattern = "share.sillylittle.tech/*"
-zone_id = "7cb3a67ff9a720d9d07336094c5fd193"
+pattern = "kiya.party/*"
+zone_id = "c274e776cf92ab6edc345be1ca77db81"
 
 
 # ─── Secrets (set via CLI, NOT in this file) ─────────────────────────────────

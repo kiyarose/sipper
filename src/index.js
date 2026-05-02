@@ -1,19 +1,19 @@
 /**
- * Plummer — Cloudflare Worker Link Shortener
+ * Sipper — Cloudflare Worker Link Shortener
  *
- * Required KV binding : LINKIVERSE
+ * Required KV binding : SIPPER
  * Required secret     : ADMIN_SECRET  (npx wrangler secret put ADMIN_SECRET)
  *
  * KV schema — key: "link:{slug}"
  * Value (JSON):
- *   {
- *     slug        : string,
- *     guest       : string,   // destination URL
- *     passwordHash: string|null,  // SHA-256 of password, or null
- *     expiresAt   : number|null,  // Unix ms timestamp, or null
- *     clicks      : number,
- *     createdAt   : number        // Unix ms timestamp
- *   }
+ * {
+ * slug        : string,
+ * guest       : string,   // destination URL
+ * passwordHash: string|null,  // SHA-256 of password, or null
+ * expiresAt   : number|null,  // Unix ms timestamp, or null
+ * clicks      : number,
+ * createdAt   : number        // Unix ms timestamp
+ * }
  */
 
 // ─── Reserved slugs that cannot be used as short-link slugs ─────────────────
@@ -21,7 +21,7 @@ const RESERVED = new Set([
   'admin', 'api', 'favicon.ico', 'robots.txt', 'sitemap.xml',
 ]);
 
-const ADMIN_REALM = 'Plummer Admin';
+const ADMIN_REALM = 'Sipper Admin';
 
 // ─── Shared CSS (based on SillyLittleTech lander / pasCurtain) ──────────────
 const SHARED_CSS = `
@@ -243,7 +243,7 @@ function htmlPage(title, bodyContent, extraCss = '', extraScript = '') {
 // ─── Page: Homepage ──────────────────────────────────────────────────────────
 function homePage(origin) {
   return htmlPage(
-    'Plummer — Link Shortener',
+    'Sipper — Link Shortener',
     `<main class="home-main">
   <div class="hero">
     <div class="hero-icon" aria-hidden="true">
@@ -254,7 +254,7 @@ function homePage(origin) {
         <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
       </svg>
     </div>
-    <h1>Plummer</h1>
+    <h1>Sipper</h1>
     <p class="tagline">A simple, fast link shortener — powered by<br>Cloudflare Workers &amp; KV.</p>
     <a href="/admin" class="btn btn-primary hero-cta">Manage Links →</a>
   </div>
@@ -284,7 +284,7 @@ function homePage(origin) {
 </main>
 
 <footer class="home-footer">
-  Plummer — Open-source link shortener by
+  Sipper — Open-source link shortener by
   <a href="https://sillylittle.tech" target="_blank" rel="noopener">SillyLittleTech</a>.
   <a href="https://github.com/SillyLittleTech/plummer" target="_blank" rel="noopener">View on GitHub</a>
 </footer>`,
@@ -378,10 +378,10 @@ function adminPage(links, origin) {
       }).join('');
 
   return htmlPage(
-    'Plummer — Admin',
+    'Sipper — Admin',
     `<div class="admin-wrap">
   <header class="admin-header">
-    <a href="/" class="back-link">← Plummer</a>
+    <a href="/" class="back-link">← Sipper</a>
     <h1>Link Dashboard</h1>
     <p>Create, track, and manage your short links.</p>
   </header>
@@ -633,7 +633,7 @@ document.getElementById('createForm').addEventListener('submit', async function(
 // ─── Page: Password prompt ───────────────────────────────────────────────────
 function passwordPage(slug, badPassword) {
   return htmlPage(
-    'Protected Link — Plummer',
+    'Protected Link — Sipper',
     `<div class="pw-wrap">
   <div class="card pw-card">
     <div class="pw-icon" aria-hidden="true">🔒</div>
@@ -667,7 +667,7 @@ function passwordPage(slug, badPassword) {
 // ─── Page: Link expired ──────────────────────────────────────────────────────
 function expiredPage() {
   return htmlPage(
-    'Link Expired — Plummer',
+    'Link Expired — Sipper',
     `<div class="center-wrap">
   <div class="card center-card">
     <div class="page-icon" aria-hidden="true">⏰</div>
@@ -689,7 +689,7 @@ function expiredPage() {
 // ─── Page: Not found ─────────────────────────────────────────────────────────
 function notFoundPage() {
   return htmlPage(
-    'Not Found — Plummer',
+    'Not Found — Sipper',
     `<div class="center-wrap">
   <div class="card center-card">
     <div class="page-icon" aria-hidden="true">🔍</div>
@@ -711,7 +711,7 @@ function notFoundPage() {
 // ─── Page: Misconfigured (no ADMIN_SECRET set) ───────────────────────────────
 function misconfiguredPage() {
   return htmlPage(
-    'Setup Required — Plummer',
+    'Setup Required — Sipper',
     `<div class="center-wrap">
   <div class="card center-card">
     <div class="page-icon" aria-hidden="true">⚙️</div>
@@ -829,17 +829,17 @@ function unauthorizedResponse() {
 // ─── KV helpers ──────────────────────────────────────────────────────────────
 
 async function getLink(env, slug) {
-  const raw = await env.LINKIVERSE.get(`link:${slug}`);
+  const raw = await env.SIPPER.get(`link:${slug}`);
   if (!raw) return null;
   try { return JSON.parse(raw); } catch { return null; }
 }
 
 async function putLink(env, link) {
-  await env.LINKIVERSE.put(`link:${link.slug}`, JSON.stringify(link));
+  await env.SIPPER.put(`link:${link.slug}`, JSON.stringify(link));
 }
 
 async function deleteLink(env, slug) {
-  await env.LINKIVERSE.delete(`link:${slug}`);
+  await env.SIPPER.delete(`link:${slug}`);
 }
 
 /** Fetch all stored links, handling KV list pagination. */
@@ -847,9 +847,9 @@ async function getAllLinks(env) {
   const links = [];
   let cursor;
   do {
-    const page = await env.LINKIVERSE.list({ prefix: 'link:', limit: 100, cursor });
+    const page = await env.SIPPER.list({ prefix: 'link:', limit: 100, cursor });
     for (const key of page.keys) {
-      const raw = await env.LINKIVERSE.get(key.name);
+      const raw = await env.SIPPER.get(key.name);
       if (raw) {
         try { links.push(JSON.parse(raw)); } catch { /* skip corrupt entries */ }
       }

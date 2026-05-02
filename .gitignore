@@ -1,0 +1,15 @@
+# Dependencies & build output
+node_modules/
+dist/
+
+# Wrangler local state
+.wrangler/
+
+# Local secrets file (used by `wrangler dev` for local environment variables)
+.dev.vars
+
+# Editor / OS
+.DS_Store
+.vscode/
+*.log
+.env

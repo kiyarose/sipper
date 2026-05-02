@@ -1,0 +1,15 @@
+{
+  "name": "plummer",
+  "version": "1.0.0",
+  "description": "A simple, fast link shortener powered by Cloudflare Workers & KV",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "cf-typegen": "wrangler types"
+  },
+  "devDependencies": {
+    "wrangler": "^4.86.0"
+  },
+  "license": "MIT"
+}

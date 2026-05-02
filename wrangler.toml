@@ -1,0 +1,27 @@
+name = "plummer"
+main = "src/index.js"
+compatibility_date = "2025-04-01"
+
+# ─── KV Namespace ────────────────────────────────────────────────────────────
+[[kv_namespaces]]
+binding = "LINKIVERSE"
+id = "30fa1d3f69d8412bb79886b862851801"
+# Uncomment and fill in a preview namespace ID for `wrangler dev`:
+preview_id = "00410bf2f1054283819de99e7958be89"
+
+# ─── Custom Domain (optional) ────────────────────────────────────────────────
+# Uncomment and update to route a custom domain through this worker.
+[[routes]]
+pattern = "share.sillylittle.tech/*"
+zone_id = "7cb3a67ff9a720d9d07336094c5fd193"
+
+
+# ─── Secrets (set via CLI, NOT in this file) ─────────────────────────────────
+# npx wrangler secret put ADMIN_SECRET
+# This is the password used to access the /admin dashboard.
+
+
+[observability]
+[observability.logs]
+enabled = true
+invocation_logs = true
